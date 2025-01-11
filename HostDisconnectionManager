@@ -1,0 +1,36 @@
+using System.Collections;
+using System.Collections.Generic;
+using Unity.Netcode;
+using UnityEngine;
+
+public class HostDisconnectionManager : MonoBehaviour
+{
+    void Start()
+    {
+
+        NetworkManager.Singleton.OnClientDisconnectCallback += NetworkManager_OnClientDisconnectCallback;
+
+    }
+
+    void Update()
+    {
+        
+    }
+
+
+    void NetworkManager_OnClientDisconnectCallback(ulong clientId)
+    {
+        Debug.Log("Host Disconnected: " + clientId);
+
+        if ( clientId == NetworkManager.ServerClientId)
+        {
+            Debug.Log("Host has disconnected!");
+            HostDisconnectUI[] ui = FindObjectsOfType<HostDisconnectUI>();
+            foreach (HostDisconnectUI ui2 in ui)
+            {
+                ui2.HostDisconnected();
+            }
+        }
+    }
+
+}
